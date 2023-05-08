@@ -26,9 +26,9 @@ mgmtagent:
    # Follow steps documented at https://github.com/oracle/docker-images/tree/main/OracleManagementAgent to build docker image.
    image:
       # Replace this value with actual docker image URL for Management Agent
-      url: iad.ocir.io/idhybdxllr8w/mgmtagent-container:mgmtagent.2995
+      url:
       # Image secrets to use for pulling container image (base64 encoded content of ~/.docker/config.json file)
-      secret: ewoJImF1dGhzIjogewoJCSJpYWQub2Npci5pbyI6IHsKCQkJImF1dGgiOiAiWW0xalgyOXdaWEpoZEc5eVgyRmpZMlZ6Y3k5d2NtRnpaV0pvWVRwNGJXVlRWM3Q0SzNGUmVUWklOVEI3YW5jck9RPT0iCgkJfQoJfSwKCSJIdHRwSGVhZGVycyI6IHsKCQkiVXNlci1BZ2VudCI6ICJEb2NrZXItQ2xpZW50LzE5LjAzLjExLW9sIChsaW51eCkiCgl9LAoJInByb3hpZXMiOiB7CgkJImRlZmF1bHQiOiB7CgkJCSJodHRwUHJveHkiOiAiaHR0cDovL3d3dy1wcm94eS1icm1kYy51cy5vcmFjbGUuY29tOjgwIiwKCQkJImh0dHBzUHJveHkiOiAiaHR0cDovL3d3dy1wcm94eS1icm1kYy51cy5vcmFjbGUuY29tOjgwIiwKCQkJIm5vUHJveHkiOiAibG9jYWxob3N0LDEyNy4wLjAuMSwudXMub3JhY2xlLmNvbSwub3JhY2xlY29ycC5jb20iLAoJCQkiZnRwUHJveHkiOiAiaHR0cDovL3d3dy1wcm94eS1icm1kYy51cy5vcmFjbGUuY29tOjgwIgoJCX0KCX0KfQ==
+      secret:
 
 # Kubernetes namespace to create and install this helm chart in
 namespace: "{{ .Values.global.namespace }}"
@@ -37,7 +37,7 @@ namespace: "{{ .Values.global.namespace }}"
 serviceAccount: "{{ .Values.global.resourceNamePrefix }}"
 
 # By default, metric server will be deployed and used by Management Agent to collect metrics. You can set this to false if you already have metric server installed on your cluster
-deployMetricServer: false
+deployMetricServer: true
 
 # Kubernetes Cluster details to monitor
 kubernetesCluster:
