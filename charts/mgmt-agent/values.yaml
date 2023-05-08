@@ -26,9 +26,9 @@ mgmtagent:
    # Follow steps documented at https://github.com/oracle/docker-images/tree/main/OracleManagementAgent to build docker image.
    image:
       # Replace this value with actual docker image URL for Management Agent
-      url:
+      url: iad.ocir.io/idhybdxllr8w/mgmtagent-container:mgmtagent.2995
       # Image secrets to use for pulling container image (base64 encoded content of ~/.docker/config.json file)
-      secret:
+      secret: ewoJImF1dGhzIjogewoJCSJpYWQub2Npci5pbyI6IHsKCQkJImF1dGgiOiAiWW0xalgyOXdaWEpoZEc5eVgyRmpZMlZ6Y3k5d2NtRnpaV0pvWVRwNGJXVlRWM3Q0SzNGUmVUWklOVEI3YW5jck9RPT0iCgkJfQoJfSwKCSJIdHRwSGVhZGVycyI6IHsKCQkiVXNlci1BZ2VudCI6ICJEb2NrZXItQ2xpZW50LzE5LjAzLjExLW9sIChsaW51eCkiCgl9LAoJInByb3hpZXMiOiB7CgkJImRlZmF1bHQiOiB7CgkJCSJodHRwUHJveHkiOiAiaHR0cDovL3d3dy1wcm94eS1icm1kYy51cy5vcmFjbGUuY29tOjgwIiwKCQkJImh0dHBzUHJveHkiOiAiaHR0cDovL3d3dy1wcm94eS1icm1kYy51cy5vcmFjbGUuY29tOjgwIiwKCQkJIm5vUHJveHkiOiAibG9jYWxob3N0LDEyNy4wLjAuMSwudXMub3JhY2xlLmNvbSwub3JhY2xlY29ycC5jb20iLAoJCQkiZnRwUHJveHkiOiAiaHR0cDovL3d3dy1wcm94eS1icm1kYy51cy5vcmFjbGUuY29tOjgwIgoJCX0KCX0KfQ==
 
 # Kubernetes namespace to create and install this helm chart in
 namespace: "{{ .Values.global.namespace }}"
@@ -37,13 +37,42 @@ namespace: "{{ .Values.global.namespace }}"
 serviceAccount: "{{ .Values.global.resourceNamePrefix }}"
 
 # By default, metric server will be deployed and used by Management Agent to collect metrics. You can set this to false if you already have metric server installed on your cluster
-deployMetricServer: true
+deployMetricServer: false
 
 # Kubernetes Cluster details to monitor
 kubernetesCluster:
    # OCI Compartment Id to push Kubernetes Monitoring metrics. If not specified default is same as Agent compartment
    compartmentId:
    # Kubernetes cluster name
-   name: 
+   name:
    # Kubernetes cluster namespace(s) to monitor. This can be a comma-separated list of namespaces or '*' to monitor all the namespaces
    namespace: '*'
+
+deployment:
+   security:
+      # Processes in the Container will run as user ID 1000, replace it with a different value if desired
+      runAsUser: 1000
+      # Processes in the Container will use group ID 2000, replace it with a different value if desired
+      runAsGroup: 2000
+      # Files created in the Container will use group ID 2000, replace it with a different value if desired
+      fsGroup: 2000
+
+   # Provide the agent resources as per Kubernetes resource quantity
+   resource:
+      # Provide the minimum required resources
+      request:
+         # specify the cpu cores
+         cpuCore: 100m
+         # specify the memory
+         memory: 500Mi
+         # specify the storage capacity for StatefulSet's PVC
+         storage: 2Gi
+      # Provide the maximum limit for resources
+      limit:
+         # specify the cpu cores
+         cpuCore: 500m
+         # specify the memory
+         memory: 1Gi
+   
+   # Provide the storage class for StatefulSet's PVC. If not provided then the Cluster's default storage class will be used.
+   storageClass:
